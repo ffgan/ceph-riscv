@@ -26,7 +26,7 @@ jobs:
 
       - name: do_cmake
         run: |
-          ssh rv_u24 "cd /src && ./do_cmake.sh"
+          ssh rv_u24 "cd /src && rm -rf build ; rm -rf ./dist;./do_cmake.sh"
 
       - name: ninja build
         run: |

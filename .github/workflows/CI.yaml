@@ -9,9 +9,6 @@ on:
 
 jobs:
   b2-posix:
-    strategy:
-      fail-fast: false
-
     runs-on: self-hosted
     timeout-minutes: 30000
     steps:
@@ -21,7 +18,7 @@ jobs:
 
       - name: install dep
         run: |
-          ssh rv_u24 "cd /src && ls -l && ./install_deps.sh" "
+          ssh rv_u24 "cd /src && ls -l && ./install_deps.sh"
 
       - name: do_cmake
         run: |

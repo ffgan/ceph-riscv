@@ -16,6 +16,10 @@ jobs:
         run: |
           ssh rv_u24 "uname -a;cat /etc/os-release"
 
+      - name: init submoudlue
+        run: |
+          ssh rv_u24 "cd /src && git submodule update --init --recursive"
+
       - name: install dep
         run: |
           ssh rv_u24 "cd /src && ls -l && ./install-deps.sh"

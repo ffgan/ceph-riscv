@@ -26,11 +26,11 @@ jobs:
 
       - name: do_cmake
         run: |
-          ssh rvu24 "cd /src && NPM_REGISTRY="https://mirrors.cloud.tencent.com/npm/" NODE_OPTIONS="--max-old-space-size=8192" ./do_cmake.sh"
+          ssh rvu24 "cd /src && export NPM_REGISTRY="https://mirrors.cloud.tencent.com/npm/" && export  NODE_OPTIONS="--max-old-space-size=8192" && ./do_cmake.sh"
 
       - name: ninja build
         run: |
-          ssh rvu24 "cd /src/build && cmake -DWITH_MGR_DASHBOARD_FRONTEND=OFF .. && ninja -j64 -k0"
+          ssh rvu24 "cd /src/build && export NPM_REGISTRY="https://mirrors.cloud.tencent.com/npm/" && export  NODE_OPTIONS="--max-old-space-size=8192" && cmake -DWITH_MGR_DASHBOARD_FRONTEND=OFF .. && ninja -j64 -k0"
 
       - name: ninja check
         run: |

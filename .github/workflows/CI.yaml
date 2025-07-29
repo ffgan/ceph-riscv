@@ -18,24 +18,25 @@ jobs:
 
       - name: Download source code
         run: |
-          ssh rvu24 "mkdir -p ceph && cd ceph && git clone --depth 1 --branch daily/jinzhu https://code.risc-vers.cn/risc-verse/wg-cloudcomputing/ceph-riscv.git"
+          # this repo have the same code as the https://github.com/ffgan/ceph/tree/feature/allow_riscv64_compile repo
+          ssh rvu24 "git clone https://code.risc-vers.cn/risc-verse/wg-cloudcomputing/ceph-riscv.git && git switch feature/allow_riscv64_compile"
 
       - name: init submoudlue
         run: |
-          ssh rvu24 "cd ceph && git submodule update --init --recursive"
+          ssh rvu24 "cd ceph-riscv && git submodule update --init --recursive"
 
       - name: install dep
         run: |
-          ssh rvu24 "cd ceph && ls -l && ./install-deps.sh && git config --global safe.directory '*'"
+          ssh rvu24 "cd ceph-riscv && ls -l && ./install-deps.sh && git config --global safe.directory '*'"
 
       - name: do_cmake
         run: |
-          ssh rvu24 "cd ceph && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && rm -rf build && ./do_cmake.sh"
+          ssh rvu24 "cd ceph-riscv && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && rm -rf build && ARGS='-DWITH_MGR_DASHBOARD_FRONTEND=OFF' ./do_cmake.sh"
 
       - name: ninja build
         run: |
-          ssh rvu24 "cd ceph/build && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && cmake -DWITH_MGR_DASHBOARD_FRONTEND=OFF .. && ninja -j64 -k0"
+          ssh rvu24 "cd ceph-riscv/build && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && ninja -j64 -k0"
 
       - name: ninja check
         run: |
-          ssh rvu24 "cd ceph/build && ninja check -j64 -k0"
+          ssh rvu24 "cd ceph-riscv/build && ninja check -j64 -k0"

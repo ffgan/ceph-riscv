@@ -26,7 +26,7 @@ jobs:
 
       - name: do_cmake
         run: |
-          ssh rvu24 "cd /src && export NPM_REGISTRY="https://mirrors.cloud.tencent.com/npm/" && export  NODE_OPTIONS="--max-old-space-size=8192" && ./do_cmake.sh"
+          ssh rvu24 "cd /src && export NPM_REGISTRY="https://mirrors.cloud.tencent.com/npm/" && export  NODE_OPTIONS="--max-old-space-size=8192" && rm -rf build && ./do_cmake.sh"
 
       - name: ninja build
         run: |

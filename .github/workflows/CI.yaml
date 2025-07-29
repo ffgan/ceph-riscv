@@ -22,15 +22,15 @@ jobs:
 
       - name: install dep
         run: |
-          ssh rvu24 "cd /src && ls -l && FOR_MAKE_CHECK=true ./install-deps.sh && git config --global safe.directory '*'"
+          ssh rvu24 "cd /src && ls -l && ./install-deps.sh && git config --global safe.directory '*'"
 
       - name: do_cmake
         run: |
-          ssh rvu24 "cd /src && export NPM_REGISTRY="https://mirrors.cloud.tencent.com/npm/" && export  NODE_OPTIONS="--max-old-space-size=8192" && rm -rf build && ./do_cmake.sh"
+          ssh rvu24 "cd /src && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && rm -rf build && ./do_cmake.sh"
 
       - name: ninja build
         run: |
-          ssh rvu24 "cd /src/build && export NPM_REGISTRY="https://mirrors.cloud.tencent.com/npm/" && export  NODE_OPTIONS="--max-old-space-size=8192" && cmake -DWITH_MGR_DASHBOARD_FRONTEND=OFF .. && ninja -j64 -k0"
+          ssh rvu24 "cd /src/build && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && cmake -DWITH_MGR_DASHBOARD_FRONTEND=OFF .. && ninja -j64 -k0"
 
       - name: ninja check
         run: |

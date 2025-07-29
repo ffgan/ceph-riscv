@@ -18,7 +18,7 @@ jobs:
 
       - name: init submoudlue
         run: |
-          ssh rvu24 "cd /src && git pull --rebase &&git submodule update --init --recursive"
+          ssh rvu24 "cd /src && git checkout . && git pull --rebase &&git submodule update --init --recursive"
 
       - name: install dep
         run: |

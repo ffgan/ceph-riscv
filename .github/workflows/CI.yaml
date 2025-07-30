@@ -19,7 +19,7 @@ jobs:
       - name: Download source code
         run: |
           # this repo have the same code as the https://github.com/ffgan/ceph/tree/feature/allow_riscv64_compile repo
-          ssh rvu24 "git clone https://code.risc-vers.cn/risc-verse/wg-cloudcomputing/ceph-riscv.git;cd ceph-riscv &&  git pull --rebase && git switch feature/allow_riscv64_compile"
+          ssh rvu24 "git clone https://code.risc-vers.cn/risc-verse/wg-cloudcomputing/ceph-riscv.git;cd ceph-riscv  && git switch feature/allow_riscv64_compile &&  git pull --rebase"
 
       - name: init submoudlue
         run: |

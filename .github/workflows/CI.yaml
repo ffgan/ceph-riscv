@@ -31,7 +31,7 @@ jobs:
 
       - name: do_cmake
         run: |
-          ssh rvu24 "cd ceph-riscv && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && rm -rf build;sed -i 's/v18\.17\.0/v20.18.1/g' src/pybind/mgr/dashboard/frontend/CMakeLists.txt; && ARGS='-DWITH_MGR_DASHBOARD_FRONTEND=OFF' ./do_cmake.sh"
+          ssh rvu24 "cd ceph-riscv && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && rm -rf build;sed -i 's/v18\.17\.0/v20.18.1/g' src/pybind/mgr/dashboard/frontend/CMakeLists.txt;ARGS='-DWITH_MGR_DASHBOARD_FRONTEND=OFF' ./do_cmake.sh"
 
       - name: ninja build
         run: |

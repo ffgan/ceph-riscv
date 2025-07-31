@@ -27,7 +27,7 @@ jobs:
 
       - name: install dep
         run: |
-          ssh rvu24 "cd ceph-riscv && ls -l && ./install-deps.sh && git config --global safe.directory '*'"
+          ssh rvu24 "cd ceph-riscv && ls -l && FOR_MAKE_CHECK=true  ./install-deps.sh && git config --global safe.directory '*'"
 
       - name: do_cmake
         run: |

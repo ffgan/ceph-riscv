@@ -1,11 +1,11 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - "**"
-    tags:
-      - "**"
+  # push:
+  #   branches:
+  #     - "**"
+  #   tags:
+  #     - "**"
 
 jobs:
   build_and_test_ceph:

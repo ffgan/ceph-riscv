@@ -50,7 +50,7 @@ jobs:
 
       - name: install tool
         run: |
-          ${{matrix.container.container-exec}} bash -c "apt update && apt install wget unzip -y"
+          ${{matrix.container.container-exec}} bash -c "apt update && apt install wget unzip git -y"
           ${{matrix.container.container-exec}} cat /etc/os-release
 
       - name: predownload ceph-boost
@@ -58,15 +58,19 @@ jobs:
           ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/ceph-boost-riscv/releases/download/1.87/ceph-boost-deb-u22.zip"
           ${{matrix.container.container-exec}} bash -c "unzip ceph-boost-deb-u22.zip && unzip ceph-boost-all.zip"
 
-      - name: install valgrind
+      - name: predownload valgrind 3.25.1
         run: |
-          ${{matrix.container.container-exec}} bash -c "apt update && apt install -y software-properties-common && add-apt-repository ppa:jchittum/valgrind-riscv-2120873 &&apt update"
-          ${{matrix.container.container-exec}} bash -c "apt install valgrind"
+          ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/valgrind-riscv-deb/releases/download/0.0.1/valgrind-deb.zip"
+          ${{matrix.container.container-exec}} bash -c "unzip valgrind-deb.zip"
 
       - name: exec install
         run: |
           ${{matrix.container.container-exec}} bash -c "apt install --fix-broken -y ./*deb"
 
-      # - name: exec ./install-deps.sh
-      #   run: |
-      #     ${{matrix.container.container-exec}} bash -c "wget https://answers.launchpad.net/ubuntu/+archive/primary/+sourcefiles/valgrind/1:3.25.1-0ubuntu1/valgrind_3.25.1-0ubuntu1.debian.tar.xz && tar -xf valgrind_3.25.1-0ubuntu1.debian.tar.xz && cd debian && ls -l "
+      - name: download source
+        run: |
+          ${{matrix.container.container-exec}} bash -c "git clone --depth=1 -b feature/allow_riscv_install_deps https://github.com/ffgan/ceph.git && cd ceph && ls -l"
+
+      - name: exec ./install-deps.sh
+        run: |
+          ${{matrix.container.container-exec}} bash -c "cd ceph && ./install-deps.sh"

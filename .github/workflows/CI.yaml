@@ -1,59 +1,59 @@
-name: CI
+# name: CI
 
-on:
-  # push:
-  #   branches:
-  #     - "**"
-  #   tags:
-  #     - "**"
+# on:
+#   push:
+#     branches:
+#       - "**"
+#     tags:
+#       - "**"
 
-jobs:
-  build_and_test_ceph:
-    runs-on: self-hosted
-    timeout-minutes: 30000
-    steps:
-      - name: Show uname info
-        run: |
-          ssh rvu24 "uname -a;cat /etc/os-release"
+# jobs:
+#   build_and_test_ceph:
+#     runs-on: self-hosted
+#     timeout-minutes: 30000
+#     steps:
+#       - name: Show uname info
+#         run: |
+#           ssh rvu24 "uname -a;cat /etc/os-release"
 
-      - name: Download source code
-        run: |
-          # this repo have the same code as the https://github.com/ffgan/ceph/tree/feature/allow_riscv64_compile repo
-          ssh rvu24 "git clone https://code.risc-vers.cn/risc-verse/wg-cloudcomputing/ceph-riscv.git;cd ceph-riscv  && git switch feature/allow_riscv64_compile &&  git pull --rebase"
+#       - name: Download source code
+#         run: |
+#           # this repo have the same code as the https://github.com/ffgan/ceph/tree/feature/allow_riscv64_compile repo
+#           ssh rvu24 "git clone https://code.risc-vers.cn/risc-verse/wg-cloudcomputing/ceph-riscv.git;cd ceph-riscv  && git switch feature/allow_riscv64_compile &&  git pull --rebase"
 
-      - name: init submoudlue
-        run: |
-          ssh rvu24 "cd ceph-riscv && git submodule update --init --recursive"
+#       - name: init submoudlue
+#         run: |
+#           ssh rvu24 "cd ceph-riscv && git submodule update --init --recursive"
 
-      - name: install dep
-        run: |
-          ssh rvu24 "cd ceph-riscv && ls -l && FOR_MAKE_CHECK=true  ./install-deps.sh && git config --global safe.directory '*'"
+#       - name: install dep
+#         run: |
+#           ssh rvu24 "cd ceph-riscv && ls -l && FOR_MAKE_CHECK=true  ./install-deps.sh && git config --global safe.directory '*'"
 
-      - name: do_cmake
-        run: |
-          ssh rvu24 "cd ceph-riscv && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && rm -rf build;ARGS='-DWITH_MGR_DASHBOARD_FRONTEND=OFF' ./do_cmake.sh"
+#       - name: do_cmake
+#         run: |
+#           ssh rvu24 "cd ceph-riscv && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && rm -rf build;ARGS='-DWITH_MGR_DASHBOARD_FRONTEND=OFF' ./do_cmake.sh"
 
-      - name: ninja build
-        continue-on-error: true
-        run: |
-          ssh rvu24 "cd ceph-riscv/build && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && ninja -j64 -k0"
+#       - name: ninja build
+#         continue-on-error: true
+#         run: |
+#           ssh rvu24 "cd ceph-riscv/build && export NPM_REGISTRY=https://mirrors.cloud.tencent.com/npm/ && export  NODE_OPTIONS=--max-old-space-size=8192 && ninja -j64 -k0"
 
-      - name: ninja check
-        continue-on-error: true
-        run: |
-          ssh rvu24 "cd ceph-riscv/build && ninja check -j64 -k0"
+#       - name: ninja check
+#         continue-on-error: true
+#         run: |
+#           ssh rvu24 "cd ceph-riscv/build && ninja check -j64 -k0"
 
-      - name: ctest again
-        continue-on-error: true
-        run: |
-          ssh rvu24 "cd ceph-riscv/build && ctest -j64 -k0"
+#       - name: ctest again
+#         continue-on-error: true
+#         run: |
+#           ssh rvu24 "cd ceph-riscv/build && ctest -j64 -k0"
       
-      - name: copy log to local
-        run: |
-          scp rvu24:ceph-riscv/build/Testing/Temporary/*.log ./
+#       - name: copy log to local
+#         run: |
+#           scp rvu24:ceph-riscv/build/Testing/Temporary/*.log ./
 
-      - name: Upload log
-        uses: actions/upload-artifact@v4
-        with:
-          name: logs.zip
-          path: ./*.log
+#       - name: Upload log
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: logs.zip
+#           path: ./*.log

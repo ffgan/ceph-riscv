@@ -55,13 +55,13 @@ jobs:
 
       - name: predownload ceph-boost
         run: |
-          ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/ceph-boost-riscv/releases/download/u22%2Bu24/ceph-boost-deb-u22.zip"
+          ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/ceph-boost-riscv/releases/download/1.87/ceph-boost-deb-u22.zip"
           ${{matrix.container.container-exec}} bash -c "unzip ceph-boost-deb-u22.zip && unzip ceph-boost-all.zip"
 
-      - name: predownload valgrind 3.25.1
+      - name: install valgrind
         run: |
-          ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/valgrind-riscv-deb/releases/download/0.0.1/valgrind-deb.zip"
-          ${{matrix.container.container-exec}} bash -c "unzip valgrind-deb.zip"
+          ${{matrix.container.container-exec}} bash -c "sudo add-apt-repository ppa:jchittum/valgrind-riscv-2120873 &&sudo apt update"
+          ${{matrix.container.container-exec}} bash -c "sudo apt install valgrind"
 
       - name: exec install
         run: |

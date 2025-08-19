@@ -50,7 +50,7 @@ jobs:
 
       - name: install tool
         run: |
-          ${{matrix.container.container-exec}} bash -c "apt update && apt install wget unzip git -y"
+          ${{matrix.container.container-exec}} bash -c "apt update && apt install wget unzip git curl -y"
           ${{matrix.container.container-exec}} cat /etc/os-release
 
       - name: predownload ceph-boost

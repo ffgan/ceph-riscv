@@ -50,7 +50,7 @@ jobs:
 
       - name: install tool
         run: |
-          ${{matrix.container.container-exec}} bash -c "apt update && apt install wget unzip "
+          ${{matrix.container.container-exec}} bash -c "apt update && apt install wget unzip -y"
           ${{matrix.container.container-exec}} cat /etc/os-release
 
 
@@ -59,7 +59,7 @@ jobs:
           ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/ceph-boost-riscv/releases/download/u22%2Bu24/ceph-boost-deb-u22.zip"
           ${{matrix.container.container-exec}} bash -c "unzip ceph-boost-deb-u22.zip && unzip ceph-boost-all.zip"
 
-          ${{matrix.container.container-exec}} bash -c "apt install --fix-broken ."
+          ${{matrix.container.container-exec}} bash -c "apt install --fix-broken ./*deb"
 
 
       # - name: preinstall valgrind 3.25.1

@@ -83,4 +83,4 @@ jobs:
 
       - name: exec ./install-deps.sh
         run: |
-          ${{matrix.container.container-exec}} bash -c "cd ceph && ./install-deps.sh"
+          ${{matrix.container.container-exec}} bash -c "cd ceph && FOR_MAKE_CHECK=true ./install-deps.sh"

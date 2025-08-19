@@ -60,7 +60,7 @@ jobs:
 
       - name: install valgrind
         run: |
-          ${{matrix.container.container-exec}} bash -c "add-apt-repository ppa:jchittum/valgrind-riscv-2120873 &&apt update"
+          ${{matrix.container.container-exec}} bash -c "apt update && apt install -y software-properties-common && add-apt-repository ppa:jchittum/valgrind-riscv-2120873 &&apt update"
           ${{matrix.container.container-exec}} bash -c "apt install valgrind"
 
       - name: exec install

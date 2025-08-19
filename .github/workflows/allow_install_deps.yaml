@@ -1,4 +1,4 @@
-name: CI
+name: ceph install deps
 
 on:
   push:
@@ -60,8 +60,8 @@ jobs:
 
       - name: install valgrind
         run: |
-          ${{matrix.container.container-exec}} bash -c "sudo add-apt-repository ppa:jchittum/valgrind-riscv-2120873 &&sudo apt update"
-          ${{matrix.container.container-exec}} bash -c "sudo apt install valgrind"
+          ${{matrix.container.container-exec}} bash -c "add-apt-repository ppa:jchittum/valgrind-riscv-2120873 &&apt update"
+          ${{matrix.container.container-exec}} bash -c "apt install valgrind"
 
       - name: exec install
         run: |

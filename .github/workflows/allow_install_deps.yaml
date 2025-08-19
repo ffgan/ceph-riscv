@@ -63,6 +63,16 @@ jobs:
           ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/valgrind-riscv-deb/releases/download/0.0.1/valgrind-deb.zip"
           ${{matrix.container.container-exec}} bash -c "unzip valgrind-deb.zip"
 
+      - name: remove broken deb
+        run: |
+          # The following information may help to resolve the situation:
+          # The following packages have unmet dependencies:
+          #  ceph-libboost-json1.87-dev : Depends: ceph-libboost1.21-dev (= 1.87.0-1.1) but it is not installable
+          # E: Unable to correct problems, you have held broken packages.
+
+          
+          ${{matrix.container.container-exec}} bash -c "rm ceph-libboost-json1*"
+
       - name: exec install
         run: |
           ${{matrix.container.container-exec}} bash -c "apt install --fix-broken -y ./*deb"

@@ -11,7 +11,7 @@ jobs:
       matrix:
         container: [
             {
-              image: fedorariscv/base:latest,
+              image: fedorariscv/base:40,
               container-exec: "docker exec fedora",
               container-name: "fedora",
             },
@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: ffgan/ceph
-          ref: feature/allow_riscv_install_deps
+          ref: rv64-install-deps
           fetch-depth: 1
 
       - name: setup qemu

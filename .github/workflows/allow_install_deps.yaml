@@ -11,7 +11,7 @@ jobs:
       matrix:
         container: [
             {
-              image: fedorariscv/base:40,
+              image: fedorariscv/base:latest,
               container-exec: "docker exec fedora",
               container-name: "fedora",
             },

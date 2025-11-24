@@ -2,13 +2,9 @@ name: ceph install deps
 
 on:
   push:
-    branches:
-      - "**"
-    tags:
-      - "**"
 
 jobs:
-  b2-posix:
+  fedora_riscv_install_deps:
     runs-on: ubuntu-latest
 
     strategy:
@@ -31,6 +27,13 @@ jobs:
             # },
           ]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          repository: ffgan/ceph
+          ref: feature/allow_riscv_install_deps
+          fetch-depth: 1
+
       - name: setup qemu
         uses: docker/setup-qemu-action@v3
         with:
@@ -41,23 +44,17 @@ jobs:
 
       - name: start container
         run: |
-          docker run --platform linux/riscv64 -d --name  ${{matrix.container.container-name}} -v ./:/src ${{matrix.container.image}} bash -c "while true; do sleep 30; done"
+          docker run --platform linux/riscv64 -d --name  ${{matrix.container.container-name}} -v ./:/src ${{matrix.container.image}} sleep infinity
 
-      - name: Show uname info
+      - name: Show uname info and os-release
         run: |
           ${{matrix.container.container-exec}} uname -a
           ${{matrix.container.container-exec}} cat /etc/os-release
 
-      - name: install tool
+      - name: install builddep
         run: |
-          ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf install wget unzip git curl -y && dnf5 install -y 'dnf5-command(builddep)'"
-          ${{matrix.container.container-exec}} cat /etc/os-release
-
-
-      - name: download source
-        run: |
-          ${{matrix.container.container-exec}} bash -c "git clone --depth=1 -b feature/allow_riscv_install_deps https://github.com/ffgan/ceph.git && cd ceph && ls -l"
+          ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)'"
 
       - name: exec ./install-deps.sh
         run: |
-          ${{matrix.container.container-exec}} bash -c "cd ceph && FOR_MAKE_CHECK=true ./install-deps.sh"
+          ${{matrix.container.container-exec}} bash -c "cd /src && FOR_MAKE_CHECK=true ./install-deps.sh"

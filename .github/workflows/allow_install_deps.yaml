@@ -4,31 +4,29 @@ on:
   push:
     branches:
       - "**"
-    tags:
-      - "**"
 
 jobs:
-  b2-posix:
+  install-deps:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         container: [
             {
-              image: ubuntu:22.04,
-              container-exec: "docker exec u22",
-              container-name: "u22",
+              image: ubuntu:resolute,
+              container-exec: "docker exec u26",
+              container-name: "u26",
             },
             # {
             #   image: ubuntu:24.04,
             #   container-exec: "docker exec u24",
             #   container-name: "u24",
             # },
-            # {
-            #   image: debian:13,
-            #   container-exec: "docker exec deb13",
-            #   container-name: "deb13",
-            # },
+            {
+              image: debian:forky,
+              container-exec: "docker exec deb14",
+              container-name: "deb14",
+            },
           ]
     steps:
       - name: setup qemu
@@ -48,34 +46,33 @@ jobs:
           ${{matrix.container.container-exec}} uname -a
           ${{matrix.container.container-exec}} cat /etc/os-release
 
-      - name: install tool
-        run: |
-          ${{matrix.container.container-exec}} bash -c "apt update && apt install wget unzip git curl -y"
-          ${{matrix.container.container-exec}} cat /etc/os-release
+      # - name: install tool
+      #   run: |
+      #     ${{matrix.container.container-exec}} bash -c "apt update && apt install wget unzip git curl -y"
+      #     ${{matrix.container.container-exec}} cat /etc/os-release
 
-      - name: predownload ceph-boost
-        run: |
-          ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/ceph-boost-riscv/releases/download/1.87/ceph-boost-deb-u22.zip"
-          ${{matrix.container.container-exec}} bash -c "unzip ceph-boost-deb-u22.zip && unzip ceph-boost-all.zip"
+      # - name: predownload ceph-boost
+      #   run: |
+      #     ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/ceph-boost-riscv/releases/download/1.87/ceph-boost-deb-u22.zip"
+      #     ${{matrix.container.container-exec}} bash -c "unzip ceph-boost-deb-u22.zip && unzip ceph-boost-all.zip"
 
       - name: predownload valgrind 3.25.1
         run: |
-          ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/valgrind-riscv-deb/releases/download/0.0.1/valgrind-deb.zip"
-          ${{matrix.container.container-exec}} bash -c "unzip valgrind-deb.zip"
+          ${{matrix.container.container-exec}} bash -c "apt update && apt install valgrind -y"
 
-      - name: remove broken deb
-        run: |
-          # The following information may help to resolve the situation:
-          # The following packages have unmet dependencies:
-          #  ceph-libboost-json1.87-dev : Depends: ceph-libboost1.21-dev (= 1.87.0-1.1) but it is not installable
-          # E: Unable to correct problems, you have held broken packages.
+      # - name: remove broken deb
+      #   run: |
+      #     # The following information may help to resolve the situation:
+      #     # The following packages have unmet dependencies:
+      #     #  ceph-libboost-json1.87-dev : Depends: ceph-libboost1.21-dev (= 1.87.0-1.1) but it is not installable
+      #     # E: Unable to correct problems, you have held broken packages.
 
-          
-          ${{matrix.container.container-exec}} bash -c "rm ceph-libboost-json1*"
 
-      - name: exec install
-        run: |
-          ${{matrix.container.container-exec}} bash -c "apt install --fix-broken -y ./*deb"
+      #     ${{matrix.container.container-exec}} bash -c "rm ceph-libboost-json1*"
+
+      # - name: exec install
+      #   run: |
+      #     ${{matrix.container.container-exec}} bash -c "apt install --fix-broken -y ./*deb"
 
       - name: download source
         run: |
@@ -84,3 +81,8 @@ jobs:
       - name: exec ./install-deps.sh
         run: |
           ${{matrix.container.container-exec}} bash -c "cd ceph && FOR_MAKE_CHECK=true ./install-deps.sh"
+      - name: clean container
+        if: always()
+        run: |
+          docker stop ${{matrix.container.container-name}}
+          docker rm ${{matrix.container.container-name}}

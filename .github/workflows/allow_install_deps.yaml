@@ -15,16 +15,6 @@ jobs:
               container-exec: "docker exec fedora",
               container-name: "fedora",
             },
-            # {
-            #   image: ubuntu:24.04,
-            #   container-exec: "docker exec u24",
-            #   container-name: "u24",
-            # },
-            # {
-            #   image: debian:13,
-            #   container-exec: "docker exec deb13",
-            #   container-name: "deb13",
-            # },
           ]
     steps:
       - name: Checkout code
@@ -58,3 +48,9 @@ jobs:
       - name: exec ./install-deps.sh
         run: |
           ${{matrix.container.container-exec}} bash -c "cd /src && FOR_MAKE_CHECK=true ./install-deps.sh"
+
+      - name: clean container
+        if: always()
+        run: |
+          docker stop ${{matrix.container.container-name}}
+          docker rm ${{matrix.container.container-name}}

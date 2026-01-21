@@ -2,6 +2,7 @@ name: ceph install deps
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   fedora_riscv_install_deps:

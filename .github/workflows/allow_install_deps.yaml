@@ -55,7 +55,12 @@ jobs:
 
       - name: install builddep
         run: |
-          ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)'"
+          ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)' wget"
+
+
+      - name: install missing rpm
+        run: |
+          ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/ceph-riscv/releases/download/0.0.1/ceph-fedora41-missing-rpm.zip && unzip ceph-fedora41-missing-rpm.zip && dnf install -y ./*.rpm"
 
       - name: exec ./install-deps.sh
         run: |

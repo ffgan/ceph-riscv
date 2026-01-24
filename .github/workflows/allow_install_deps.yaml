@@ -55,7 +55,7 @@ jobs:
 
       - name: install builddep
         run: |
-          ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)' wget unzip"
+          ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)' wget unzip rust cargo openssl-devel libffi-devel"
 
 
       - name: install missing rpm

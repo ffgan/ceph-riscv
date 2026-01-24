@@ -32,7 +32,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: ffgan/ceph
-          ref: fedora-rv64
+          ref: rv64-pypi
           fetch-depth: 1
           path: ceph
 

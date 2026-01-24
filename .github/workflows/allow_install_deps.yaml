@@ -55,7 +55,12 @@ jobs:
 
       - name: install builddep
         run: |
-          ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)' wget unzip rust cargo openssl-devel libffi-devel"
+          ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)' wget unzip rust cargo openssl-devel libffi-devel gcc gcc-gfortran openblas-devel"
+      
+      # in order to build scipy (under riscv64)
+      - name: copy openblas to container
+        run: |
+          docker cp openblas.pc fedora:/usr/lib64/pkgconfig/openblas.pc
 
 
       - name: install missing rpm

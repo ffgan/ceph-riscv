@@ -10,7 +10,8 @@ jobs:
 
     strategy:
       matrix:
-        container: [
+        container:
+          [
             {
               image: fedorariscv/base:41,
               container-exec: "docker exec fedora",
@@ -34,7 +35,6 @@ jobs:
           fetch-depth: 1
           path: ceph
 
-
       - name: setup qemu
         uses: docker/setup-qemu-action@v3
         with:
@@ -52,16 +52,14 @@ jobs:
           ${{matrix.container.container-exec}} uname -a
           ${{matrix.container.container-exec}} cat /etc/os-release
 
-      # in order to build scipy (under riscv64)
-      - name: copy openblas to container
-        run: |
-          ls -l
-          docker cp openblas/openblas.pc fedora:/usr/lib64/pkgconfig/openblas.pc
-
       - name: install builddep
         run: |
           ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)' wget unzip rust cargo openssl-devel libffi-devel gcc gcc-gfortran openblas-devel"
 
+      # in order to build scipy (under riscv64)
+      - name: copy openblas to container
+        run: |
+          docker cp openblas/openblas.pc fedora:/usr/lib64/pkgconfig/openblas.pc
 
       - name: install missing rpm
         run: |

@@ -21,6 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
+          ref: fedora
           sparse-checkout: |
             openblas.pc
           sparse-checkout-cone-mode: false

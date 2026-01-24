@@ -25,6 +25,7 @@ jobs:
           ref: fedora
           sparse-checkout: |
             openblas.pc
+            pip.conf
           sparse-checkout-cone-mode: false
           path: openblas
       - name: Checkout code
@@ -55,6 +56,11 @@ jobs:
       - name: install builddep
         run: |
           ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)' wget unzip rust cargo openssl-devel libffi-devel gcc gcc-gfortran openblas-devel"
+
+      - name: conf pip source
+        run: |
+          ${{matrix.container.container-exec}} bash -c "mkdir ~/.pip"
+          docker cp openblas/pip.conf fedora:/root/.pip/pip.conf
 
       # in order to build scipy (under riscv64)
       - name: copy openblas to container

@@ -32,6 +32,8 @@ jobs:
           repository: ffgan/ceph
           ref: fedora-rv64
           fetch-depth: 1
+          path: ceph
+
 
       - name: setup qemu
         uses: docker/setup-qemu-action@v3
@@ -43,7 +45,7 @@ jobs:
 
       - name: start container
         run: |
-          docker run --platform linux/riscv64 -d --name ${{matrix.container.container-name}} -v ./:/src ${{matrix.container.image}} sleep infinity
+          docker run --platform linux/riscv64 -d --name ${{matrix.container.container-name}} -v ./ceph:/src ${{matrix.container.image}} sleep infinity
 
       - name: Show uname info and os-release
         run: |

@@ -24,6 +24,7 @@ jobs:
           sparse-checkout: |
             openblas.pc
           sparse-checkout-cone-mode: false
+          path: openblas
       - name: Checkout code
         uses: actions/checkout@v6
         with:
@@ -52,7 +53,7 @@ jobs:
       - name: copy openblas to container
         run: |
           ls -l
-          docker cp openblas.pc fedora:/usr/lib64/pkgconfig/openblas.pc
+          docker cp openblas/openblas.pc fedora:/usr/lib64/pkgconfig/openblas.pc
 
       - name: install builddep
         run: |

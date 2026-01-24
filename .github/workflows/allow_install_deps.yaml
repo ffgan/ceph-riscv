@@ -10,25 +10,17 @@ jobs:
 
     strategy:
       matrix:
-        container:
-          [
+        container: [
             {
               image: fedorariscv/base:41,
               container-exec: "docker exec fedora",
               container-name: "fedora",
             },
-            # {
-            #   image: fedorariscv/base:42,
-            #   container-exec: "docker exec fedora",
-            #   container-name: "fedora",
-            # },
-            # {
-            #   image: fedorariscv/base:43,
-            #   container-exec: "docker exec fedora",
-            #   container-name: "fedora",
-            # },
           ]
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
       - name: Checkout code
         uses: actions/checkout@v6
         with:
@@ -56,12 +48,11 @@ jobs:
       - name: install builddep
         run: |
           ${{matrix.container.container-exec}} bash -c "dnf update -y && dnf5 install -y 'dnf5-command(builddep)' wget unzip rust cargo openssl-devel libffi-devel gcc gcc-gfortran openblas-devel"
-      
+
       # in order to build scipy (under riscv64)
       - name: copy openblas to container
         run: |
           docker cp openblas.pc fedora:/usr/lib64/pkgconfig/openblas.pc
-
 
       - name: install missing rpm
         run: |

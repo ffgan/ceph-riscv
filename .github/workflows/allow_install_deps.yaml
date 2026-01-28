@@ -78,7 +78,7 @@ jobs:
           docker cp openblas/openblas.pc fedora:/usr/lib64/pkgconfig/openblas.pc
 
       - name: install missing rpm
-        if: ${{ matrix.container.image != 'fedorariscv/base:41' }}
+        if: ${{ matrix.container.image == 'fedorariscv/base:41' }}
         run: |
           ${{matrix.container.container-exec}} bash -c "wget https://github.com/ffgan/ceph-riscv/releases/download/0.0.1/ceph-fedora41-missing-rpm.zip && unzip ceph-fedora41-missing-rpm.zip && dnf install -y ./*.rpm"
 

@@ -17,6 +17,16 @@ jobs:
               container-exec: "docker exec fedora",
               container-name: "fedora",
             },
+            {
+              image: fedorariscv/base:42,
+              container-exec: "docker exec fedora",
+              container-name: "fedora",
+            },
+            {
+              image: fedorariscv/base:43,
+              container-exec: "docker exec fedora",
+              container-name: "fedora",
+            },
           ]
     steps:
       - name: Checkout code
